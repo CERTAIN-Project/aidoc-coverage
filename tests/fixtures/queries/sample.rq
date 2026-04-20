@@ -1,0 +1,6 @@
+PREFIX aidoc: <https://w3id.org/aidoc-ap#>
+
+SELECT ?system
+WHERE {
+  ?system a aidoc:AISystem .
+}

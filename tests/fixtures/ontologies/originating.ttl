@@ -1,0 +1,14 @@
+@prefix aidoc: <https://w3id.org/aidoc-ap#> .
+@prefix ex: <https://example.com/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+aidoc:AISystem a rdfs:Class .
+aidoc:isProvidedBy a rdf:Property .
+aidoc:version a rdf:Property .
+aidoc:hasSoftwareComponent a rdf:Property .
+aidoc:requiresHardware a rdf:Property .
+aidoc:ChangeLog a rdfs:Class .
+aidoc:hasChangeRecord a rdf:Property .
+
+ex:OntologyGuide rdfs:label "AIDOC-AP coverage guide" .

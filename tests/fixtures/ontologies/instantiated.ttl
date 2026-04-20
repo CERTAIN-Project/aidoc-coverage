@@ -1,0 +1,10 @@
+@prefix aidoc: <https://w3id.org/aidoc-ap#> .
+@prefix ex: <https://example.com/> .
+
+ex:System a aidoc:AISystem ;
+  aidoc:isProvidedBy ex:Provider ;
+  aidoc:version "1.0.0" ;
+  aidoc:hasSoftwareComponent ex:InferenceService .
+
+ex:Provider a aidoc:Organisation .
+ex:InferenceService a aidoc:SoftwareComponent .

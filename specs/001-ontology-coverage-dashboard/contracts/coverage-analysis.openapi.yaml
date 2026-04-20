@@ -1,0 +1,154 @@
+openapi: 3.1.0
+info:
+  title: Coverage Analysis API
+  version: 0.1.0
+  description: >
+    Contract for the SvelteKit server endpoint that accepts ontology uploads,
+    evaluates competency-query coverage, and returns normalized dashboard data.
+servers:
+  - url: http://localhost:5173
+paths:
+  /api/coverage:
+    post:
+      summary: Analyze ontology coverage
+      operationId: analyzeCoverage
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - originatingOntology
+                - instantiatedOntology
+              properties:
+                originatingOntology:
+                  type: string
+                  format: binary
+                  description: Turtle file for the reference ontology
+                instantiatedOntology:
+                  type: string
+                  format: binary
+                  description: Turtle file for the applied ontology
+      responses:
+        '200':
+          description: Coverage analysis completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CoverageAnalysisResponse'
+        '422':
+          description: Validation failed for uploaded files or query assets
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisErrorResponse'
+        '500':
+          description: Analysis failed unexpectedly
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisErrorResponse'
+components:
+  schemas:
+    CoverageAnalysisResponse:
+      type: object
+      required:
+        - runId
+        - summary
+        - results
+      properties:
+        runId:
+          type: string
+        summary:
+          $ref: '#/components/schemas/CoverageSummary'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoverageResult'
+        warnings:
+          type: array
+          items:
+            type: string
+    CoverageSummary:
+      type: object
+      required:
+        - totalQueries
+        - coveredCount
+        - partialCount
+        - notCoveredCount
+        - errorCount
+        - coveragePercent
+        - overallStatus
+      properties:
+        totalQueries:
+          type: integer
+          minimum: 1
+        coveredCount:
+          type: integer
+          minimum: 0
+        partialCount:
+          type: integer
+          minimum: 0
+        notCoveredCount:
+          type: integer
+          minimum: 0
+        errorCount:
+          type: integer
+          minimum: 0
+        coveragePercent:
+          type: number
+          minimum: 0
+          maximum: 100
+        overallStatus:
+          type: string
+          enum:
+            - green
+            - yellow
+            - red
+            - error
+    CoverageResult:
+      type: object
+      required:
+        - queryId
+        - title
+        - status
+        - explanation
+      properties:
+        queryId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - covered
+            - partially_covered
+            - not_covered
+            - error
+        explanation:
+          type: string
+        evidenceCount:
+          type: integer
+          minimum: 0
+        evidencePreview:
+          type: array
+          items:
+            type: string
+        sourcePath:
+          type: string
+        group:
+          type: string
+    AnalysisErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+        issues:
+          type: array
+          items:
+            type: string

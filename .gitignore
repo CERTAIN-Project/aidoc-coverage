@@ -1,0 +1,15 @@
+.github/
+node_modules/
+.svelte-kit/
+dist/
+build/
+coverage/
+playwright-report/
+test-results/
+*.log
+.env*
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.idea/
