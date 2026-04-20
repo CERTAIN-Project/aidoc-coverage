@@ -31,7 +31,7 @@
   }
 </script>
 
-<Card class="section-card">
+<Card class="section-card p-4">
   <form bind:this={formElement} class="space-y-6" on:submit|preventDefault={handleSubmit}>
     <div>
       <h2 class="text-xl font-semibold text-slate-900">Upload ontologies</h2>

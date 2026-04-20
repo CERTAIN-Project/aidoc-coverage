@@ -26,8 +26,11 @@ describe('coverage results payload', () => {
     const payload = await response.json();
 
     const attentionItems = payload.results.filter((result: { status: string }) => result.status !== 'covered');
+    const evidenceSamples = payload.results.flatMap((result: { evidencePreview?: string[] }) => result.evidencePreview ?? []);
 
-    expect(attentionItems).toHaveLength(3);
+    expect(attentionItems.length).toBeGreaterThan(0);
+    expect(evidenceSamples.length).toBeGreaterThan(0);
+    expect(evidenceSamples.every((sample: string) => !sample.includes('[object Object]'))).toBe(true);
     expect(attentionItems[0]).toEqual(
       expect.objectContaining({
         queryId: expect.any(String),

@@ -1,12 +1,13 @@
 @import 'tailwindcss';
 @source "../node_modules/flowbite-svelte/dist";
+@custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  color-scheme: light;
+  color-scheme: light dark;
 }
 
 body {
-  @apply min-h-screen bg-slate-50 text-slate-900;
+  @apply min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100;
   font-family:
     Inter,
     ui-sans-serif,
@@ -22,5 +23,5 @@ body {
 }
 
 .section-card {
-  @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
+  @apply rounded-2xl border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900;
 }
