@@ -2,6 +2,7 @@
 
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { TabItem, Tabs } from 'flowbite-svelte';
   import CoverageSummary from '$lib/components/coverage/CoverageSummary.svelte';
   import ResultDetailPanel from '$lib/components/coverage/ResultDetailPanel.svelte';
   import ResultsFilterBar from '$lib/components/coverage/ResultsFilterBar.svelte';
@@ -51,7 +52,7 @@
   />
 </svelte:head>
 
-<div class="page-shell space-y-8">
+<div class="container page-shell space-y-8">
   <header class="space-y-3">
     <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700 dark:text-blue-400">CERTAIN</p>
     <div class="space-y-2">
@@ -66,35 +67,49 @@
     <StatusAlert color="red" title="Unable to load results" message={loadError} />
   {:else if response}
     <section class="space-y-6" aria-label="Coverage results">
-      <StatusAlert
-        color={response.summary.overallStatus === 'green'
-          ? 'green'
-          : response.summary.overallStatus === 'yellow'
-            ? 'yellow'
-            : 'red'}
-        title="Coverage analysis completed"
-        message={`Run ${response.runId} analyzed ${response.summary.totalQueries} competency queries.`}
-      />
+      <Tabs tabStyle="underline" contentClass="pt-6">
+        <TabItem open title="Overview">
+          <div class="space-y-6">
+            <StatusAlert
+              color={response.summary.overallStatus === 'green'
+                ? 'green'
+                : response.summary.overallStatus === 'yellow'
+                  ? 'yellow'
+                  : 'red'}
+              title="Coverage analysis completed"
+              message={`Run ${response.runId} analyzed ${response.summary.totalQueries} competency queries.`}
+            />
+            <CoverageSummary summary={response.summary} />
+          </div>
+        </TabItem>
 
-      <CoverageSummary summary={response.summary} />
-      <ResultsFilterBar selected={selectedFilter} on:change={(event) => (selectedFilter = event.detail)} />
+        <TabItem title="Details">
+          <div class="space-y-6">
+            <ResultsFilterBar selected={selectedFilter} on:change={(event) => (selectedFilter = event.detail)} />
 
-      {#if filteredResults.length}
-        <div class="space-y-6">
-          <ResultsTable
-            results={filteredResults}
-            selectedId={selectedResult?.queryId ?? ''}
-            on:select={(event) => (selectedResult = event.detail)}
-          />
-          <ResultDetailPanel result={selectedResult} />
-        </div>
-      {:else}
-        <StatusAlert
-          color="blue"
-          title="No results in this filter"
-          message="Try another filter to inspect competency queries from a different status group."
-        />
-      {/if}
+            {#if filteredResults.length}
+              <div class="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start gap-6">
+                <div class="min-w-0">
+                  <ResultsTable
+                    results={filteredResults}
+                    selectedId={selectedResult?.queryId ?? ''}
+                    on:select={(event) => (selectedResult = event.detail)}
+                  />
+                </div>
+                <div class="min-w-0">
+                  <ResultDetailPanel result={selectedResult} />
+                </div>
+              </div>
+            {:else}
+              <div class="section-card p-4">
+                <p class="text-sm text-slate-700 dark:text-slate-200">
+                  No results in this filter. Try another filter to inspect competency queries from a different status group.
+                </p>
+              </div>
+            {/if}
+          </div>
+        </TabItem>
+      </Tabs>
     </section>
   {:else}
     <StatusAlert

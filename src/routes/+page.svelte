@@ -78,7 +78,7 @@
   />
 </svelte:head>
 
-<div class="page-shell space-y-8">
+<div class="page-shell container space-y-8">
   <header class="space-y-3">
     <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700 dark:text-blue-400">CERTAIN</p>
     <div class="space-y-2">
