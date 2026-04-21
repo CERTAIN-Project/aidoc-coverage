@@ -15,7 +15,7 @@
 </script>
 
 <div class="flex min-h-screen flex-col">
-  <Navbar class="border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
+  <Navbar class="border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90 p-0">
     <NavBrand href="/" class="font-semibold text-slate-900 dark:text-slate-100">
       <span class="self-center whitespace-nowrap text-lg">CERTAIN Coverage</span>
     </NavBrand>
@@ -31,7 +31,7 @@
     </NavUl>
   </Navbar>
 
-  <main class="flex-1 pb-28">
+  <main class="flex-1">
     <slot />
   </main>
 
