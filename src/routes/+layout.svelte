@@ -1,5 +1,6 @@
 <script lang="ts">
   import '../app.css';
+  import { base } from '$app/paths';
   import {
     DarkMode,
     Footer,
@@ -16,7 +17,7 @@
 
 <div class="flex min-h-screen flex-col">
   <Navbar class="border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90 p-0">
-    <NavBrand href="/" class="font-semibold text-slate-900 dark:text-slate-100">
+    <NavBrand href="{base}/" class="font-semibold text-slate-900 dark:text-slate-100">
       <span class="self-center whitespace-nowrap text-lg">CERTAIN Coverage</span>
     </NavBrand>
 
@@ -26,8 +27,8 @@
     </div>
 
     <NavUl class="md:order-1" ulClass="mt-4 md:mt-0">
-      <NavLi href="/">Dashboard</NavLi>
-      <NavLi href="/results">Results</NavLi>
+      <NavLi href="{base}/">Dashboard</NavLi>
+      <NavLi href="{base}/results">Results</NavLi>
     </NavUl>
   </Navbar>
 
@@ -40,13 +41,13 @@
     <div class="mx-auto flex w-full max-w-7xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <FooterCopyright
         by="CERTAIN"
-        href="/"
+        href="{base}/"
         class="text-sm text-slate-600 dark:text-slate-300"
         copyrightMessage="All rights reserved."
       />
       <FooterLinkGroup class="flex gap-4 text-sm">
-        <FooterLink href="/legal-information">Legal information</FooterLink>
-        <FooterLink href="/privacy">Privacy</FooterLink>
+        <FooterLink href="{base}/legal-information">Legal information</FooterLink>
+        <FooterLink href="{base}/privacy">Privacy</FooterLink>
       </FooterLinkGroup>
     </div>
   </Footer>

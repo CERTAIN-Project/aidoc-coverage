@@ -139,7 +139,7 @@
       <div class="section-card p-4">
         <p class="text-sm text-slate-700 dark:text-slate-200">
           Latest analysis results are available.
-          <a href="/results" class="font-semibold text-blue-700 underline-offset-2 hover:underline dark:text-blue-400">
+          <a href="{base}/results" class="font-semibold text-blue-700 underline-offset-2 hover:underline dark:text-blue-400">
             Open results
           </a>
         </p>

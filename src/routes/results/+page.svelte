@@ -2,6 +2,7 @@
 
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
   import { TabItem, Tabs } from 'flowbite-svelte';
   import CoverageSummary from '$lib/components/coverage/CoverageSummary.svelte';
   import ResultDetailPanel from '$lib/components/coverage/ResultDetailPanel.svelte';
@@ -117,7 +118,7 @@
       message="Run an analysis on the dashboard page to populate this view."
     />
     <div class="section-card p-4">
-      <a href="/" class="text-sm font-semibold text-blue-700 underline-offset-2 hover:underline dark:text-blue-400">
+      <a href="{base}/" class="text-sm font-semibold text-blue-700 underline-offset-2 hover:underline dark:text-blue-400">
         Go to dashboard
       </a>
     </div>
