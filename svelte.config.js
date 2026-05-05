@@ -1,14 +1,14 @@
-import adapter from '@sveltejs/adapter-node';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+
+const base = process.env.BASE_PATH ?? '';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter(),
-    csrf: {
-      trustedOrigins: ['http://localhost:3000', 'http://127.0.0.1:3000']
-    }
+    adapter: adapter({ fallback: '404.html' }),
+    paths: { base }
   }
 };
 

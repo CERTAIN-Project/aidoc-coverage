@@ -1,9 +1,12 @@
-.github/
+.github/agents/
+.github/prompts/
+.github/copilot-instructions.md
 node_modules/
 .svelte-kit/
 dist/
 build/
 coverage/
+static/data/
 playwright-report/
 test-results/
 *.log

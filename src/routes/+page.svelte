@@ -1,7 +1,7 @@
 <svelte:options runes={false} />
 
 <script lang="ts">
-  import { browser } from '$app/environment';
+  import { browser, dev } from '$app/environment';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { Card, Helper, Label, Select } from 'flowbite-svelte';
@@ -37,13 +37,17 @@
     errorState = null;
     retryIssues = [];
 
-    const formData = new FormData();
-    formData.set('instantiatedExample', selectedExample);
+    let result: Response;
 
-    const result = await fetch('/api/coverage', {
-      method: 'POST',
-      body: formData
-    });
+    if (dev) {
+      // In development, use the live server-side API.
+      const formData = new FormData();
+      formData.set('instantiatedExample', selectedExample);
+      result = await fetch('/api/coverage', { method: 'POST', body: formData });
+    } else {
+      // In the static build, fetch the pre-generated JSON.
+      result = await fetch(`/data/coverage-${selectedExample}.json`);
+    }
 
     const responseBody = await result.json();
 
