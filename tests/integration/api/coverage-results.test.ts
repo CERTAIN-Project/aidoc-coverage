@@ -1,27 +1,16 @@
 // @vitest-environment node
 
 import { describe, expect, it } from 'vitest';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 
 import { POST } from '../../../src/routes/api/coverage/+server.ts';
 
 describe('coverage results payload', () => {
   it('givenMixedCoverage_whenAnalysisCompletes_thenResponseSupportsFilteringAndDetailViews', async () => {
-    const [originating, instantiated] = await Promise.all([
-      readFile(path.resolve('tests/fixtures/ontologies/originating.ttl'), 'utf8'),
-      readFile(path.resolve('tests/fixtures/ontologies/instantiated.ttl'), 'utf8')
-    ]);
-
     const formData = new FormData();
-    formData.set('originatingOntology', new File([originating], 'originating.ttl', { type: 'text/turtle' }));
-    formData.set('instantiatedOntology', new File([instantiated], 'instantiated.ttl', { type: 'text/turtle' }));
+    formData.set('instantiatedExample', 'encom');
 
     const response = await POST({
-      request: new Request('http://localhost/api/coverage', {
-        method: 'POST',
-        body: formData
-      })
+      request: new Request('http://localhost/api/coverage', { method: 'POST', body: formData })
     } as never);
     const payload = await response.json();
 

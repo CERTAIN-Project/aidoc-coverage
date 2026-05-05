@@ -4,7 +4,7 @@
   import { browser } from '$app/environment';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { Card, Helper, Label } from 'flowbite-svelte';
+  import { Card, Helper, Label, Select } from 'flowbite-svelte';
   import ErrorState from '$lib/components/feedback/ErrorState.svelte';
   import LoadingState from '$lib/components/feedback/LoadingState.svelte';
   import StatusAlert from '$lib/components/feedback/StatusAlert.svelte';
@@ -16,8 +16,13 @@
   let hasSavedResults = false;
   let errorState: { message: string; issues: string[] } | null = null;
   let retryIssues: string[] = [];
-  let originatingFiles: FileList | null = null;
-  let instantiatedFiles: FileList | null = null;
+  let selectedExample = 'encom';
+
+  const exampleOptions = [
+    { value: 'encom', name: 'Encom' },
+    { value: 'hr-ai', name: 'HR AI' },
+    { value: 'biometrics', name: 'Biometrics' }
+  ];
 
   onMount(() => {
     if (!browser) {
@@ -28,20 +33,12 @@
   });
 
   async function handleAnalyze() {
-    const originatingOntology = originatingFiles?.item(0) ?? null;
-    const instantiatedOntology = instantiatedFiles?.item(0) ?? null;
-
-    if (!originatingOntology || !instantiatedOntology) {
-      return;
-    }
-
     isLoading = true;
     errorState = null;
     retryIssues = [];
 
     const formData = new FormData();
-    formData.set('originatingOntology', originatingOntology);
-    formData.set('instantiatedOntology', instantiatedOntology);
+    formData.set('instantiatedExample', selectedExample);
 
     const result = await fetch('/api/coverage', {
       method: 'POST',
@@ -84,7 +81,7 @@
     <div class="space-y-2">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Ontology coverage dashboard</h1>
       <p class="max-w-3xl text-base text-slate-600 dark:text-slate-300">
-        Upload an originating ontology and an instantiated ontology to evaluate competency-query coverage on the server with Comunica.
+        Select an instantiated ontology to evaluate competency-query coverage against the AIdoc-AP reference on the server with Comunica.
       </p>
     </div>
   </header>
@@ -92,38 +89,21 @@
   <Card class="section-card p-4" size="xl">
     <form class="space-y-6" on:submit|preventDefault={handleAnalyze}>
       <div>
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Upload ontologies</h2>
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Select ontology</h2>
         <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-          Provide one originating ontology and one instantiated ontology in Turtle format.
+          Choose an instantiated ontology to evaluate against the AIdoc-AP reference ontology.
         </p>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
-        <div>
-          <Label for="originatingOntology" class="mb-2 block font-medium text-slate-900 dark:text-slate-100">Originating ontology (.ttl)</Label>
-          <input
-            id="originatingOntology"
-            name="originatingOntology"
-            type="file"
-            accept=".ttl,text/turtle"
-            class="block w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:file:bg-slate-800 dark:file:text-slate-100 dark:hover:file:bg-slate-700"
-            bind:files={originatingFiles}
-          />
-          <Helper class="mt-2 text-slate-600 dark:text-slate-300">Used as the reference ontology and query context.</Helper>
-        </div>
-
-        <div>
-          <Label for="instantiatedOntology" class="mb-2 block font-medium text-slate-900 dark:text-slate-100">Instantiated ontology (.ttl)</Label>
-          <input
-            id="instantiatedOntology"
-            name="instantiatedOntology"
-            type="file"
-            accept=".ttl,text/turtle"
-            class="block w-full rounded-lg border border-slate-300 bg-white p-2.5 text-sm text-slate-900 file:mr-4 file:rounded-md file:border-0 file:bg-slate-100 file:px-3 file:py-2 file:text-sm file:font-medium file:text-slate-700 hover:file:bg-slate-200 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:file:bg-slate-800 dark:file:text-slate-100 dark:hover:file:bg-slate-700"
-            bind:files={instantiatedFiles}
-          />
-          <Helper class="mt-2 text-slate-600 dark:text-slate-300">Used as the current project state to assess coverage.</Helper>
-        </div>
+      <div class="max-w-sm">
+        <Label for="instantiatedExample" class="mb-2 block font-medium text-slate-900 dark:text-slate-100">Instantiated ontology</Label>
+        <Select
+          id="instantiatedExample"
+          name="instantiatedExample"
+          items={exampleOptions}
+          bind:value={selectedExample}
+        />
+        <Helper class="mt-2 text-slate-600 dark:text-slate-300">Used as the current project state to assess coverage.</Helper>
       </div>
 
       {#if retryIssues.length}

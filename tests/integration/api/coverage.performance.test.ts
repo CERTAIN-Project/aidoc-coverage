@@ -2,20 +2,13 @@
 
 import { describe, expect, it } from 'vitest';
 import { performance } from 'node:perf_hooks';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 
 import { POST } from '../../../src/routes/api/coverage/+server.ts';
 
 describe('coverage performance', () => {
-  it('givenFixtureOntologies_whenAnalyzed_thenCompletesWithinBudget', async () => {
-    const [originating, instantiated] = await Promise.all([
-      readFile(path.resolve('tests/fixtures/ontologies/originating.ttl'), 'utf8'),
-      readFile(path.resolve('tests/fixtures/ontologies/instantiated.ttl'), 'utf8')
-    ]);
+  it('givenExampleOntology_whenAnalyzed_thenCompletesWithinBudget', async () => {
     const formData = new FormData();
-    formData.set('originatingOntology', new File([originating], 'originating.ttl', { type: 'text/turtle' }));
-    formData.set('instantiatedOntology', new File([instantiated], 'instantiated.ttl', { type: 'text/turtle' }));
+    formData.set('instantiatedExample', 'encom');
 
     const startedAt = performance.now();
     const response = await POST({

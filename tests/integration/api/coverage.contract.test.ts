@@ -1,26 +1,15 @@
 // @vitest-environment node
 
 import { beforeAll, describe, expect, it } from 'vitest';
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
 
 import { POST } from '../../../src/routes/api/coverage/+server.ts';
 import { coverageQueryManifest } from '../../../src/lib/server/coverage/query-set/manifest.ts';
 
-async function createRequest() {
-  const [originating, instantiated] = await Promise.all([
-    readFile(path.resolve('tests/fixtures/ontologies/originating.ttl'), 'utf8'),
-    readFile(path.resolve('tests/fixtures/ontologies/instantiated.ttl'), 'utf8')
-  ]);
-
+function createRequest() {
   const formData = new FormData();
-  formData.set('originatingOntology', new File([originating], 'originating.ttl', { type: 'text/turtle' }));
-  formData.set('instantiatedOntology', new File([instantiated], 'instantiated.ttl', { type: 'text/turtle' }));
+  formData.set('instantiatedExample', 'encom');
 
-  return new Request('http://localhost/api/coverage', {
-    method: 'POST',
-    body: formData
-  });
+  return new Request('http://localhost/api/coverage', { method: 'POST', body: formData });
 }
 
 describe('POST /api/coverage', () => {
@@ -28,8 +17,8 @@ describe('POST /api/coverage', () => {
     delete process.env.COVERAGE_QUERYSET_MODE;
   });
 
-  it('givenValidFiles_whenPosted_thenReturnsNormalizedCoveragePayload', async () => {
-    const response = await POST({ request: await createRequest() } as never);
+  it('givenValidExample_whenPosted_thenReturnsNormalizedCoveragePayload', async () => {
+    const response = await POST({ request: createRequest() } as never);
     const payload = await response.json();
     const expectedTotalQueries = coverageQueryManifest.length;
     const accountedStatuses =
