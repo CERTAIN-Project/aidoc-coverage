@@ -8,7 +8,14 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({ fallback: '404.html' }),
-    paths: { base }
+    paths: { base },
+    prerender: {
+      handleHttpError: ({ message }) => {
+        // When base is set, the prerenderer may visit paths without the prefix — expected.
+        if (message.includes('does not begin with `base`')) return;
+        throw new Error(message);
+      }
+    }
   }
 };
 
