@@ -2,6 +2,7 @@
 
 <script lang="ts">
   import { browser } from '$app/environment';
+  import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
   import { Card, Helper, Label, Select } from 'flowbite-svelte';
@@ -37,7 +38,7 @@
     errorState = null;
     retryIssues = [];
 
-    const result = await fetch(`/data/${selectedExample}`);
+    const result = await fetch(`${base}/data/${selectedExample}`);
     const responseBody = await result.json();
 
     if (!result.ok) {
