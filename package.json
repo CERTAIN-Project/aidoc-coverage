@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build:data": "tsx --tsconfig scripts/tsconfig.json scripts/pregenerate.ts",
+    "build:data": "vite-node scripts/pregenerate.ts",
     "build": "npm run build:data && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
