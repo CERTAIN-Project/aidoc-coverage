@@ -57,7 +57,7 @@
     }
 
     isLoading = false;
-    await goto('/results');
+    await goto(`${base}/results`);
   }
 </script>
 
