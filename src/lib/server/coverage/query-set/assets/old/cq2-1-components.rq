@@ -1,0 +1,7 @@
+PREFIX aidoc: <https://w3id.org/aidoc-ap#>
+
+SELECT ?component
+WHERE {
+  ?system a aidoc:AISystem ;
+    aidoc:hasSoftwareComponent ?component .
+}

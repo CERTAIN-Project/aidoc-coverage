@@ -1,0 +1,14 @@
+PREFIX aidoc: <https://w3id.org/aidoc-ap#>
+
+SELECT ?evidence
+WHERE {
+  {
+    ?system a aidoc:AISystem ;
+      aidoc:version ?evidence .
+  }
+  UNION
+  {
+    ?changeLog a aidoc:ChangeLog ;
+      aidoc:hasChangeRecord ?evidence .
+  }
+}
