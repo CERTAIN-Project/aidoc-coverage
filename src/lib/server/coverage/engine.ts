@@ -6,6 +6,7 @@ import { Store } from 'n3';
 import { mapQueryOutcome } from './mapper';
 import { summarizeResults } from './summarizer';
 import type {
+  CoverageAnalysisOptions,
   CoverageAnalysisResponse,
   ParsedOntologyInput,
   QueryDefinition,
@@ -14,6 +15,8 @@ import type {
 } from './types';
 
 const engine = new QueryEngine();
+type QueryBindingsOptions = NonNullable<Parameters<QueryEngine['queryBindings']>[1]>;
+type QuerySource = QueryBindingsOptions['sources'][number];
 
 function mergeStores(inputs: ParsedOntologyInput[]) {
   const merged = new Store();
@@ -81,10 +84,10 @@ function bindingValueToString(binding: unknown) {
     .join(', ');
 }
 
-async function executeQuery(query: QueryDefinition, store: Store): Promise<RawQueryOutcome> {
+async function executeQuery(query: QueryDefinition, sources: QuerySource[]): Promise<RawQueryOutcome> {
   try {
     const result = await engine.queryBindings(query.queryText, {
-      sources: [store]
+      sources
     });
 
     const bindings = await result.toArray();
@@ -112,10 +115,20 @@ async function executeQuery(query: QueryDefinition, store: Store): Promise<RawQu
 
 export async function analyzeCoverage(
   inputs: ParsedOntologyInput[],
-  queries: QueryDefinition[]
+  queries: QueryDefinition[],
+  options: CoverageAnalysisOptions = {}
 ): Promise<CoverageAnalysisResponse> {
   const store = mergeStores(inputs);
-  const rawOutcomes = await Promise.all(queries.map((query) => executeQuery(query, store)));
+  const sources: QuerySource[] = [store];
+
+  if (options.sparqlEndpointUrl) {
+    sources.push({
+      type: 'sparql',
+      value: options.sparqlEndpointUrl
+    });
+  }
+
+  const rawOutcomes = await Promise.all(queries.map((query) => executeQuery(query, sources)));
   const results: QueryEvaluation[] = rawOutcomes.map(mapQueryOutcome);
   const summary = summarizeResults(results);
 

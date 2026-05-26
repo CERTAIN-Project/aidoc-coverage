@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-node';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 const base = process.env.BASE_PATH ?? '';
@@ -7,11 +7,11 @@ const base = process.env.BASE_PATH ?? '';
 const config = {
   preprocess: vitePreprocess(),
   kit: {
-    adapter: adapter({ fallback: '404.html' }),
+    adapter: adapter(),
     paths: { base },
     prerender: {
       handleHttpError: ({ message }) => {
-        // When base is set, the prerenderer may visit paths without the prefix — expected.
+        // When base is set, the prerenderer may visit paths without the prefix - expected.
         if (message.includes('does not begin with `base`')) return;
         throw new Error(message);
       }

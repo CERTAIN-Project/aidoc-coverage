@@ -20,9 +20,14 @@ npm run build
 npm run dev
 ```
 
+## Environment
+
+- `SPARQL_ENDPOINT_URL` (optional): absolute URL to the SPARQL endpoint that should be queried by Comunica (for example `http://ontop:8080/sparql`)
+- If `SPARQL_ENDPOINT_URL` is not set, analysis falls back to the selected bundled example ontology.
+
 ## What it does
 
-- Uploads one originating ontology and one instantiated ontology in Turtle format
+- Uses a bundled AIdoc-AP originating ontology together with a configured SPARQL endpoint source
 - Runs server-side coverage analysis against bundled competency queries
 - Shows a traffic-light summary with counts and coverage percentage
 - Supports filtering and per-query detail inspection

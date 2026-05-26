@@ -5,11 +5,13 @@
   import { base } from '$app/paths';
   import { goto } from '$app/navigation';
   import { onMount } from 'svelte';
-  import { Card, Helper, Label, Select } from 'flowbite-svelte';
+  import { Card, Label, Select } from 'flowbite-svelte';
   import ErrorState from '$lib/components/feedback/ErrorState.svelte';
   import LoadingState from '$lib/components/feedback/LoadingState.svelte';
   import StatusAlert from '$lib/components/feedback/StatusAlert.svelte';
   import type { CoverageAnalysisResponse } from '$lib/server/coverage/types';
+
+  export let data;
 
   const LAST_RESULTS_STORAGE_KEY = 'coverage:lastResult';
 
@@ -38,7 +40,10 @@
     errorState = null;
     retryIssues = [];
 
-    const result = await fetch(`${base}/data/${selectedExample}`);
+    const formData = new FormData();
+    formData.set('instantiatedExample', selectedExample);
+
+    const result = await fetch(`${base}/api/coverage`, { method: 'POST', body: formData });
     const responseBody = await result.json();
 
     if (!result.ok) {
@@ -75,7 +80,7 @@
     <div class="space-y-2">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Ontology coverage dashboard</h1>
       <p class="max-w-3xl text-base text-slate-600 dark:text-slate-300">
-        Select an instantiated ontology to evaluate competency-query coverage against the AIdoc-AP reference on the server with Comunica.
+        Run competency-query coverage analysis against the AIdoc-AP reference ontology on the server with Comunica.
       </p>
     </div>
   </header>
@@ -83,22 +88,24 @@
   <Card class="section-card p-4" size="xl">
     <form class="space-y-6" on:submit|preventDefault={handleAnalyze}>
       <div>
-        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Select ontology</h2>
-        <p class="mt-1 text-sm text-slate-600 dark:text-slate-300">
-          Choose an instantiated ontology to evaluate against the AIdoc-AP reference ontology.
-        </p>
+        <h2 class="text-xl font-semibold text-slate-900 dark:text-slate-100">Run analysis</h2>
       </div>
 
-      <div class="max-w-sm">
-        <Label for="instantiatedExample" class="mb-2 block font-medium text-slate-900 dark:text-slate-100">Instantiated ontology</Label>
-        <Select
-          id="instantiatedExample"
-          name="instantiatedExample"
-          items={exampleOptions}
-          bind:value={selectedExample}
-        />
-        <Helper class="mt-2 text-slate-600 dark:text-slate-300">Used as the current project state to assess coverage.</Helper>
-      </div>
+      {#if data.hasSparqlEndpoint}
+        <div class="rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-200">
+          <p class="font-medium">SPARQL endpoint is configured and will be used for this analysis.</p>
+        </div>
+      {:else}
+        <div class="max-w-sm">
+          <Label for="instantiatedExample" class="mb-2 block font-medium text-slate-900 dark:text-slate-100">Select ontology</Label>
+          <Select
+            id="instantiatedExample"
+            name="instantiatedExample"
+            items={exampleOptions}
+            bind:value={selectedExample}
+          />
+        </div>
+      {/if}
 
       {#if retryIssues.length}
         <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900 dark:bg-red-950/40 dark:text-red-200">

@@ -7,6 +7,6 @@
 </script>
 
 <div class="section-card flex items-center gap-3 p-6" aria-live="polite">
-  <Spinner size="8" />
+  <Spinner size="8" color="blue" type="default" />
   <p class="text-sm font-medium text-slate-700">{message}</p>
 </div>

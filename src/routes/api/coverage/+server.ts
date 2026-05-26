@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 
-// This route is server-side only and is excluded from the static build.
-// It remains available during `vite dev` for local development.
+// This route is server-side only and requires a runtime adapter.
 export const prerender = false;
 
+import { sparqlEndpointConfigSchema } from '$lib/schemas/coverage';
 import { analyzeCoverage } from '$lib/server/coverage/engine';
 import { toAnalysisError, AnalysisError } from '$lib/server/coverage/errors';
 import { loadOntologyFromContent } from '$lib/server/coverage/loaders';
@@ -20,24 +20,57 @@ const EXAMPLE_ONTOLOGIES: Record<string, { content: string; filename: string }> 
   biometrics: { content: biometricsContent, filename: 'biometrics.ttl' }
 };
 
+function resolveSparqlEndpointUrl(): string | undefined {
+  const configuredEndpointUrl = process.env.SPARQL_ENDPOINT_URL?.trim();
+
+  if (!configuredEndpointUrl) {
+    return undefined;
+  }
+
+  const parsed = sparqlEndpointConfigSchema.safeParse({
+    sparqlEndpointUrl: configuredEndpointUrl
+  });
+
+  if (!parsed.success) {
+    throw new AnalysisError('The configured SPARQL endpoint URL is invalid.', 422, [
+      'Set SPARQL_ENDPOINT_URL to a valid absolute URL (for example http://ontop:8080/sparql).'
+    ]);
+  }
+
+  return parsed.data.sparqlEndpointUrl;
+}
+
 export async function POST({ request }) {
   try {
-    const formData = await request.formData();
-    const exampleKey = formData.get('instantiatedExample');
+    const sparqlEndpointUrl = resolveSparqlEndpointUrl();
+
+    const [originating, querySet] = await Promise.all([
+      Promise.resolve(loadOntologyFromContent(aidocContent, 'aidoc-ap.ttl', 'originating')),
+      loadCoverageQuerySet()
+    ]);
+
+    if (sparqlEndpointUrl) {
+      const response = await analyzeCoverage([originating], querySet.queries, { sparqlEndpointUrl });
+      return json(response);
+    }
+
+    let exampleKey: FormDataEntryValue | null = null;
+
+    try {
+      const formData = await request.formData();
+      exampleKey = formData.get('instantiatedExample');
+    } catch {
+      exampleKey = null;
+    }
 
     if (typeof exampleKey !== 'string' || !EXAMPLE_ONTOLOGIES[exampleKey]) {
-      throw new AnalysisError('A valid example selection is required.', 422, [
+      throw new AnalysisError('A valid example selection is required when SPARQL_ENDPOINT_URL is not configured.', 422, [
         'Select one of the available example ontologies before starting analysis.'
       ]);
     }
 
     const example = EXAMPLE_ONTOLOGIES[exampleKey];
-
-    const [originating, instantiated, querySet] = await Promise.all([
-      Promise.resolve(loadOntologyFromContent(aidocContent, 'aidoc-ap.ttl', 'originating')),
-      Promise.resolve(loadOntologyFromContent(example.content, example.filename, 'instantiated')),
-      loadCoverageQuerySet()
-    ]);
+    const instantiated = loadOntologyFromContent(example.content, example.filename, 'instantiated');
 
     const response = await analyzeCoverage([originating, instantiated], querySet.queries);
 

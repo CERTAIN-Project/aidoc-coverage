@@ -66,6 +66,10 @@ export interface QuerySet {
   queries: QueryDefinition[];
 }
 
+export interface CoverageAnalysisOptions {
+  sparqlEndpointUrl?: string;
+}
+
 export interface RawQueryOutcome {
   query: QueryDefinition;
   evidenceCount: number;

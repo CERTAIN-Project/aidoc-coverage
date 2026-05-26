@@ -1,23 +1,33 @@
 // @vitest-environment node
 
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+import { QueryEngine } from '@comunica/query-sparql';
 
 import { POST } from '../../../src/routes/api/coverage/+server.ts';
 import { coverageQueryManifest } from '../../../src/lib/server/coverage/query-set/manifest.ts';
 
 function createRequest() {
-  const formData = new FormData();
-  formData.set('instantiatedExample', 'encom');
-
-  return new Request('http://localhost/api/coverage', { method: 'POST', body: formData });
+  return new Request('http://localhost/api/coverage', { method: 'POST' });
 }
 
 describe('POST /api/coverage', () => {
   beforeAll(() => {
+    process.env.SPARQL_ENDPOINT_URL = 'http://example.test/sparql';
     delete process.env.COVERAGE_QUERYSET_MODE;
+    vi.spyOn(QueryEngine.prototype, 'queryBindings').mockResolvedValue({
+      toArray: async () => []
+    } as never);
   });
 
-  it('givenValidExample_whenPosted_thenReturnsNormalizedCoveragePayload', async () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('givenConfiguredEndpoint_whenPosted_thenReturnsNormalizedCoveragePayload', async () => {
+    vi.spyOn(QueryEngine.prototype, 'queryBindings').mockResolvedValue({
+      toArray: async () => []
+    } as never);
+
     const response = await POST({ request: createRequest() } as never);
     const payload = await response.json();
     const expectedTotalQueries = coverageQueryManifest.length;
