@@ -43,6 +43,6 @@ jobs:
           push: true
           # platforms: linux/arm64,linux/arm/v7
           tags: |
-            ${{ env.REGISTRY }}/CERTAIN-Project/aidoc-coverage:latest
-          cache-from: type=registry,ref=${{ env.REGISTRY }}/CERTAIN-Project/aidoc-coverage:latest
+            ${{ env.REGISTRY }}/certain-project/aidoc-coverage:latest
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/certain-project/aidoc-coverage:latest
           cache-to: type=inline
