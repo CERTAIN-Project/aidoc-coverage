@@ -26,7 +26,7 @@
       <NavHamburger class="text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800" />
     </div>
 
-    <NavUl class="md:order-1" ulClass="mt-4 md:mt-0">
+    <NavUl class="md:order-1" classes={{ ul: 'mt-4 md:mt-0' }}>
       <NavLi href="{base}/">Dashboard</NavLi>
       <NavLi href="{base}/results">Results</NavLi>
     </NavUl>

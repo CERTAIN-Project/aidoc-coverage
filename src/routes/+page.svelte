@@ -40,10 +40,15 @@
     errorState = null;
     retryIssues = [];
 
-    const formData = new FormData();
-    formData.set('instantiatedExample', selectedExample);
-
-    const result = await fetch(`${base}/api/coverage`, { method: 'POST', body: formData });
+    const result = data.isPagesBuild
+      ? await fetch(`${base}/data/${selectedExample}`)
+      : await fetch(`${base}/api/coverage`, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({ instantiatedExample: selectedExample })
+        });
     const responseBody = await result.json();
 
     if (!result.ok) {
@@ -137,10 +142,10 @@
   {/if}
 
   {#if !isLoading}
-    <StatusAlert
+    <!-- <StatusAlert
       title="Ready to analyze"
       message="Run an analysis to open the dedicated results page with summary, filters, and detailed evidence."
-    />
+    /> -->
 
     {#if hasSavedResults}
       <div class="section-card p-4">

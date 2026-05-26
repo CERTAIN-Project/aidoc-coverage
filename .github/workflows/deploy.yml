@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, cancelling in-progress runs.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -32,15 +31,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build static site
+      - name: Build site for Pages
         run: npm run build
         env:
           BASE_PATH: "/${{ github.event.repository.name }}"
+          DEPLOY_TARGET: pages
+
+      - name: Prepare Pages artifact
+        run: |
+          TARGET_DIR="build/prerendered/${{ github.event.repository.name }}"
+          cp -R "build/client/${{ github.event.repository.name }}/_app" "$TARGET_DIR/_app"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: build/
+          path: build/prerendered/
 
   deploy:
     name: Deploy

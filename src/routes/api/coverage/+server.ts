@@ -1,4 +1,5 @@
 import { json } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
 
 // This route is server-side only and requires a runtime adapter.
 export const prerender = false;
@@ -21,7 +22,7 @@ const EXAMPLE_ONTOLOGIES: Record<string, { content: string; filename: string }> 
 };
 
 function resolveSparqlEndpointUrl(): string | undefined {
-  const configuredEndpointUrl = process.env.SPARQL_ENDPOINT_URL?.trim();
+  const configuredEndpointUrl = (env.SPARQL_ENDPOINT_URL ?? process.env.SPARQL_ENDPOINT_URL)?.trim();
 
   if (!configuredEndpointUrl) {
     return undefined;
@@ -54,11 +55,18 @@ export async function POST({ request }) {
       return json(response);
     }
 
-    let exampleKey: FormDataEntryValue | null = null;
+    let exampleKey: unknown = null;
 
     try {
-      const formData = await request.formData();
-      exampleKey = formData.get('instantiatedExample');
+      const contentType = request.headers.get('content-type') ?? '';
+
+      if (contentType.includes('application/json')) {
+        const payload = await request.json();
+        exampleKey = payload?.instantiatedExample;
+      } else {
+        const formData = await request.formData();
+        exampleKey = formData.get('instantiatedExample');
+      }
     } catch {
       exampleKey = null;
     }

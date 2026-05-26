@@ -71,7 +71,7 @@
       <Tabs tabStyle="underline" contentClass="pt-6">
         <TabItem open title="Overview">
           <div class="space-y-6">
-            <StatusAlert
+            <!-- <StatusAlert
               color={response.summary.overallStatus === 'green'
                 ? 'green'
                 : response.summary.overallStatus === 'yellow'
@@ -79,7 +79,7 @@
                   : 'red'}
               title="Coverage analysis completed"
               message={`Run ${response.runId} analyzed ${response.summary.totalQueries} competency queries.`}
-            />
+            /> -->
             <CoverageSummary summary={response.summary} />
           </div>
         </TabItem>

@@ -24,6 +24,7 @@ npm run dev
 
 - `SPARQL_ENDPOINT_URL` (optional): absolute URL to the SPARQL endpoint that should be queried by Comunica (for example `http://ontop:8080/sparql`)
 - If `SPARQL_ENDPOINT_URL` is not set, analysis falls back to the selected bundled example ontology.
+- Analysis requests now use JSON rather than form submissions, so Docker deployments do not need a build-time trusted-origins setting for SvelteKit CSRF protection.
 
 ## What it does
 
