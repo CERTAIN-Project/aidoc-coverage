@@ -24,6 +24,8 @@ const SPARQL_ASSETS_DIR = 'src/lib/server/coverage/query-set/assets';
 
 const EXAMPLES: Record<string, string> = {
   encom: 'src/lib/server/coverage/inputs/examples/encom.ttl',
+  bank: 'src/lib/server/coverage/inputs/examples/bank.ttl',
+  civicvoice: 'src/lib/server/coverage/inputs/examples/civicvoice.ttl',
   'hr-ai': 'src/lib/server/coverage/inputs/examples/hr-ai.ttl',
   biometrics: 'src/lib/server/coverage/inputs/examples/biometrics.ttl'
 };

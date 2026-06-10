@@ -7,6 +7,8 @@ import { loadCoverageQuerySet } from '$lib/server/coverage/query-set';
 
 import aidocContent from '$lib/server/coverage/inputs/aidoc-ap.ttl?raw';
 import encomContent from '$lib/server/coverage/inputs/examples/encom.ttl?raw';
+import bankContent from '$lib/server/coverage/inputs/examples/bank.ttl?raw';
+import civicvoiceContent from '$lib/server/coverage/inputs/examples/civicvoice.ttl?raw';
 import hrAiContent from '$lib/server/coverage/inputs/examples/hr-ai.ttl?raw';
 import biometricsContent from '$lib/server/coverage/inputs/examples/biometrics.ttl?raw';
 
@@ -14,6 +16,8 @@ export const prerender = true;
 
 const EXAMPLES: Record<string, { content: string; filename: string }> = {
   encom: { content: encomContent, filename: 'encom.ttl' },
+  bank: { content: bankContent, filename: 'bank.ttl' },
+  civicvoice: { content: civicvoiceContent, filename: 'civicvoice.ttl' },
   'hr-ai': { content: hrAiContent, filename: 'hr-ai.ttl' },
   biometrics: { content: biometricsContent, filename: 'biometrics.ttl' }
 };

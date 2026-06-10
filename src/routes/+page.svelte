@@ -24,6 +24,8 @@
   const exampleOptions = [
     { value: 'encom', name: 'Encom' },
     { value: 'hr-ai', name: 'HR AI' },
+    { value: 'bank', name: 'Bank' },
+    { value: 'civicvoice', name: 'Civic Voice' },
     { value: 'biometrics', name: 'Biometrics' }
   ];
 
