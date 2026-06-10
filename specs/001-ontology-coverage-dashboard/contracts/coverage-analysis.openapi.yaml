@@ -137,6 +137,10 @@ components:
           type: array
           items:
             type: string
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
         sourcePath:
           type: string
         group:

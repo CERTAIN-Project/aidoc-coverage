@@ -24,6 +24,18 @@
 
       <p class="text-sm text-slate-700 dark:text-slate-200">{result.explanation}</p>
 
+      {#if result.status === 'error' && (result.errorMessage || result.errorCode)}
+        <div class="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-900 dark:border-red-900 dark:bg-red-950/40 dark:text-red-100">
+          <p class="font-semibold">Query execution error</p>
+          {#if result.errorMessage}
+            <p class="mt-1 whitespace-pre-wrap break-words">{result.errorMessage}</p>
+          {/if}
+          {#if result.errorCode}
+            <p class="mt-2 text-xs uppercase tracking-wide text-red-700 dark:text-red-300">Code: {result.errorCode}</p>
+          {/if}
+        </div>
+      {/if}
+
       <dl class="grid gap-4 rounded-xl bg-slate-100 p-4 sm:grid-cols-2 dark:bg-slate-800/60">
         <div>
           <dt class="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">Evidence count</dt>

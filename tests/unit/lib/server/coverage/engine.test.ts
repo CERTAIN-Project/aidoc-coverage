@@ -43,4 +43,37 @@ describe('engine evidence preview formatting', () => {
     expect(preview).toContain('?system=');
     expect(preview).not.toContain('[object Object]');
   });
+
+  it('givenInvalidQuery_whenEvaluationFails_thenIncludesErrorMessageInResult', async () => {
+    const ttl = `
+      @prefix aidoc: <https://w3id.org/aidoc-ap#> .
+      @prefix ex: <https://example.com/> .
+      ex:system a aidoc:AISystem .
+    `;
+
+    const input: ParsedOntologyInput = {
+      role: 'originating',
+      filename: 'originating.ttl',
+      mediaType: 'text/turtle',
+      content: ttl,
+      sizeBytes: ttl.length,
+      checksum: 'test-checksum',
+      store: parseTurtle(ttl)
+    };
+
+    const query: QueryDefinition = {
+      id: 'cq-invalid',
+      title: 'Invalid query',
+      sourcePath: 'src/lib/server/coverage/query-set/assets/cq-invalid.sparql',
+      queryText: 'SELECT WHERE { ?s ?p ?o . }'
+    };
+
+    const response = await analyzeCoverage([input], [query]);
+    const result = response.results[0];
+
+    expect(result.status).toBe('error');
+    expect(result.errorCode).toBeTruthy();
+    expect(result.errorMessage).toBeTruthy();
+    expect(result.errorMessage?.length).toBeGreaterThan(0);
+  });
 });

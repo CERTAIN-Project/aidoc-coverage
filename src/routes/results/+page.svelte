@@ -21,6 +21,7 @@
   let loadError: string | null = null;
   let selectedFilter: ResultFilterStatus = 'all';
   let selectedResult: QueryEvaluation | null = null;
+  let hasLoggedQueryErrors = false;
 
   $: filteredResults =
     response?.results.filter((result) => selectedFilter === 'all' || result.status === selectedFilter) ?? [];
@@ -42,6 +43,26 @@
         loadError = 'Stored analysis results could not be read. Run a new analysis from the dashboard.';
       }
     }
+  }
+
+  $: if (browser && response && !hasLoggedQueryErrors) {
+    const failedQueries = response.results.filter((result) => result.status === 'error');
+
+    if (failedQueries.length) {
+      console.groupCollapsed(`[Coverage] ${failedQueries.length} query evaluation error(s)`);
+
+      for (const result of failedQueries) {
+        console.error(`[${result.queryId}] ${result.title}`, {
+          message: result.errorMessage ?? 'No detailed error message available.',
+          code: result.errorCode,
+          sourcePath: result.sourcePath
+        });
+      }
+
+      console.groupEnd();
+    }
+
+    hasLoggedQueryErrors = true;
   }
 </script>
 

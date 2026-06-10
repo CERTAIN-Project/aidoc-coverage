@@ -84,6 +84,28 @@ function bindingValueToString(binding: unknown) {
     .join(', ');
 }
 
+function extractQueryErrorMessage(error: unknown): string {
+  if (error instanceof Error) {
+    const message = error.message.trim();
+
+    if (message) {
+      return message;
+    }
+
+    return error.name || 'Unknown query execution error';
+  }
+
+  if (typeof error === 'string' && error.trim()) {
+    return error;
+  }
+
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+}
+
 async function executeQuery(query: QueryDefinition, sources: QuerySource[]): Promise<RawQueryOutcome> {
   try {
     const result = await engine.queryBindings(query.queryText, {
@@ -108,7 +130,8 @@ async function executeQuery(query: QueryDefinition, sources: QuerySource[]): Pro
       evidenceCount: 0,
       evidencePreview: [],
       status: 'error',
-      errorCode: error instanceof Error ? error.name : 'query_execution_error'
+      errorCode: error instanceof Error ? error.name : 'query_execution_error',
+      errorMessage: extractQueryErrorMessage(error)
     };
   }
 }

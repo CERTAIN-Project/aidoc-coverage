@@ -40,6 +40,7 @@ export interface QueryEvaluation {
   evidenceCount: number;
   evidencePreview?: string[];
   errorCode?: string;
+  errorMessage?: string;
   sourcePath: string;
   group?: string;
 }
@@ -76,4 +77,5 @@ export interface RawQueryOutcome {
   evidencePreview: string[];
   status: CoverageStatus;
   errorCode?: string;
+  errorMessage?: string;
 }

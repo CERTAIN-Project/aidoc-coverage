@@ -27,6 +27,7 @@ export function mapQueryOutcome(outcome: RawQueryOutcome): QueryEvaluation {
     evidenceCount: outcome.evidenceCount,
     evidencePreview: outcome.evidencePreview,
     errorCode: outcome.errorCode,
+    errorMessage: outcome.errorMessage,
     sourcePath: outcome.query.sourcePath,
     group: outcome.query.group
   };
