@@ -1,0 +1,2 @@
+PORT=3000
+SPARQL_ENDPOINT_URL=http://ontop:8080/sparql

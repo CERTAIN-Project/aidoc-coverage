@@ -1,0 +1,11 @@
+name: coverage
+services:
+    coverage:
+        build: .
+        image: aidoc-coverage
+        ports:
+            - ${PORT:-3000}:3000
+        environment:
+            - SPARQL_ENDPOINT_URL=${SPARQL_ENDPOINT_URL?configure URL or set empty for examples}
+        read_only: true
+        

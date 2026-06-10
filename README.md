@@ -9,15 +9,32 @@ SvelteKit application for comparing an instantiated ontology against an originat
 - `@comunica/query-sparql`
 - Vitest + Playwright
 
-## Commands
+## Docker
+
+This repository includes two Docker Compose files:
+
+- `compose.yaml`: standard/runtime setup
+- `dev-compose.yaml`: development-oriented setup
+
+Before running either setup, configure your environment file:
 
 ```bash
-npm install
-npm run check
-npm test
-npm run test:e2e
-npm run build
-npm run dev
+cp env .env
+```
+
+Then edit `.env` and set values for your environment.
+
+- `SPARQL_ENDPOINT_URL` (**required**): **URL** to the SPARQL endpoint (e.g. `http://ontop:8080/sparql`) or **empty** for examples
+- `PORT` (optional): port to expose the dashboard on (default: `3000`)
+
+Example commands:
+
+```bash
+# Run the default setup
+docker compose -f compose.yaml up
+
+# Run the development setup
+docker compose -f dev-compose.yaml up --build
 ```
 
 ## Environment
