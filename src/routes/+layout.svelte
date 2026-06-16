@@ -36,7 +36,6 @@
     <slot />
   </main>
 
-  <!-- fixed -->
   <Footer class="inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/90 backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
     <div class="mx-auto flex w-full max-w-7xl flex-col gap-3 md:flex-row md:items-center md:justify-between">
       <FooterCopyright

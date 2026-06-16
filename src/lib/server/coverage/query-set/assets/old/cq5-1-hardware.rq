@@ -1,7 +1,0 @@
-PREFIX aidoc: <https://w3id.org/aidoc-ap#>
-
-SELECT ?hardware
-WHERE {
-  ?system a aidoc:AISystem ;
-    aidoc:requiresHardware ?hardware .
-}

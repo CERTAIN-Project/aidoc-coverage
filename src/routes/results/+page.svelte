@@ -76,7 +76,6 @@
 
 <div class="container page-shell space-y-8">
   <header class="space-y-3">
-    <!-- <p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700 dark:text-blue-400">CERTAIN</p> -->
     <div class="space-y-2">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Coverage results</h1>
       <p class="max-w-3xl text-base text-slate-600 dark:text-slate-300">
@@ -92,15 +91,6 @@
       <Tabs tabStyle="underline" contentClass="pt-6">
         <TabItem open title="Overview">
           <div class="space-y-6">
-            <!-- <StatusAlert
-              color={response.summary.overallStatus === 'green'
-                ? 'green'
-                : response.summary.overallStatus === 'yellow'
-                  ? 'yellow'
-                  : 'red'}
-              title="Coverage analysis completed"
-              message={`Run ${response.runId} analyzed ${response.summary.totalQueries} competency queries.`}
-            /> -->
             <CoverageSummary summary={response.summary} />
           </div>
         </TabItem>
