@@ -80,7 +80,7 @@
   />
 </svelte:head>
 
-<div class="page-shell container space-y-8">
+<div class="page-shell lg:container space-y-8">
   <header class="space-y-3">
     <div class="space-y-2">
       <h1 class="text-4xl font-bold tracking-tight text-slate-900 dark:text-slate-100">Ontology coverage dashboard</h1>

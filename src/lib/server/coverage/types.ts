@@ -1,5 +1,7 @@
 import type { Store } from 'n3';
 
+import type { CompletenessReport } from '../completeness/types';
+
 export type OntologyRole = 'originating' | 'instantiated';
 export type CoverageStatus = 'covered' | 'partially_covered' | 'not_covered' | 'error';
 export type SummaryStatus = 'green' | 'yellow' | 'red' | 'error';
@@ -60,6 +62,7 @@ export interface CoverageAnalysisResponse {
   summary: CoverageSummary;
   results: QueryEvaluation[];
   warnings: string[];
+  completeness?: CompletenessReport;
 }
 
 export interface QuerySet {

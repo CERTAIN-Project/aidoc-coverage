@@ -22,13 +22,13 @@
 
 <div class="section-card w-full overflow-hidden">
   <div class="w-full overflow-x-auto">
-    <table class="w-full table-auto divide-y divide-slate-200 dark:divide-slate-700">
+    <table class="w-full table-fixed divide-y divide-slate-200 dark:divide-slate-700">
       <thead class="bg-slate-100 dark:bg-slate-800">
         <tr>
-          <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Query</th>
-          <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Status</th>
-          <th class="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Evidence</th>
-          <th class="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Group</th>
+          <th class="w-[57%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Query</th>
+          <th class="w-[15%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Status</th>
+          <th class="w-[10%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Evidence</th>
+          <th class="w-[18%] px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-300">Group</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-200 bg-white dark:divide-slate-700 dark:bg-slate-900">
@@ -39,14 +39,14 @@
           on:click={() => dispatch('select', result)}
         >
           <td class="px-4 py-3">
-            <div>
-              <p class="font-medium text-slate-900 dark:text-slate-100">{result.title}</p>
-              <p class="text-xs text-slate-500 dark:text-slate-400">{result.queryId}</p>
+            <div class="min-w-0">
+              <p class="break-words font-medium text-slate-900 dark:text-slate-100">{result.title}</p>
+              <p class="break-words text-xs text-slate-500 dark:text-slate-400">{result.queryId}</p>
             </div>
           </td>
-          <td class="px-4 py-3 text-slate-700 dark:text-slate-200"><CoverageBadge status={result.status} /></td>
-          <td class="px-4 py-3 text-slate-700 dark:text-slate-200">{result.evidenceCount}</td>
-          <td class="whitespace-nowrap px-4 py-3 text-slate-700 dark:text-slate-200">{result.group}</td>
+          <td class="px-4 py-3 text-left text-slate-700 dark:text-slate-200"><CoverageBadge status={result.status} /></td>
+          <td class="px-4 py-3 text-right text-slate-700 dark:text-slate-200">{result.evidenceCount}</td>
+          <td class="whitespace-nowrap text-left px-4 py-3 text-slate-700 dark:text-slate-200" title={result.group}>{result.group}</td>
         </tr>
       {/each}
       </tbody>

@@ -9,6 +9,7 @@ import { analyzeCoverage } from '$lib/server/coverage/engine';
 import { toAnalysisError, AnalysisError } from '$lib/server/coverage/errors';
 import { loadOntologyFromContent } from '$lib/server/coverage/loaders';
 import { loadCoverageQuerySet } from '$lib/server/coverage/query-set';
+import { analyzeCompleteness } from '$lib/server/completeness/usage';
 
 import aidocContent from '$lib/server/coverage/inputs/aidoc-ap.ttl?raw';
 import encomContent from '$lib/server/coverage/inputs/examples/encom.ttl?raw';
@@ -55,8 +56,11 @@ export async function POST({ request }) {
     ]);
 
     if (sparqlEndpointUrl) {
-      const response = await analyzeCoverage([originating], querySet.queries, { sparqlEndpointUrl });
-      return json(response);
+      const [response, completeness] = await Promise.all([
+        analyzeCoverage([originating], querySet.queries, { sparqlEndpointUrl }),
+        analyzeCompleteness([originating], { sparqlEndpointUrl })
+      ]);
+      return json({ ...response, completeness });
     }
 
     let exampleKey: unknown = null;
@@ -84,9 +88,12 @@ export async function POST({ request }) {
     const example = EXAMPLE_ONTOLOGIES[exampleKey];
     const instantiated = loadOntologyFromContent(example.content, example.filename, 'instantiated');
 
-    const response = await analyzeCoverage([originating, instantiated], querySet.queries);
+    const [response, completeness] = await Promise.all([
+      analyzeCoverage([originating, instantiated], querySet.queries),
+      analyzeCompleteness([originating, instantiated])
+    ]);
 
-    return json(response);
+    return json({ ...response, completeness });
   } catch (error) {
     const analysisError = toAnalysisError(error);
 

@@ -6,7 +6,7 @@
 	/>
 </svelte:head>
 
-<div class="page-shell">
+<div class="lg:container page-shell">
 	<section class="section-card p-6 sm:p-8">
 		<header class="space-y-2">
 			<p class="text-sm font-semibold uppercase tracking-[0.2em] text-blue-700 dark:text-blue-400">CERTAIN</p>

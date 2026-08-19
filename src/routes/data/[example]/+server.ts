@@ -4,6 +4,7 @@ import type { RequestHandler } from './$types';
 import { analyzeCoverage } from '$lib/server/coverage/engine';
 import { loadOntologyFromContent } from '$lib/server/coverage/loaders';
 import { loadCoverageQuerySet } from '$lib/server/coverage/query-set';
+import { analyzeCompleteness } from '$lib/server/completeness/usage';
 
 import aidocContent from '$lib/server/coverage/inputs/aidoc-ap.ttl?raw';
 import encomContent from '$lib/server/coverage/inputs/examples/encom.ttl?raw';
@@ -39,6 +40,10 @@ export const GET: RequestHandler = async ({ params }) => {
     loadCoverageQuerySet()
   ]);
 
-  const result = await analyzeCoverage([originating, instantiated], querySet.queries);
-  return json(result);
+  const [result, completeness] = await Promise.all([
+    analyzeCoverage([originating, instantiated], querySet.queries),
+    analyzeCompleteness([originating, instantiated])
+  ]);
+
+  return json({ ...result, completeness });
 };

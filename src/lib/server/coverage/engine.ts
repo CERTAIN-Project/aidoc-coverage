@@ -18,7 +18,7 @@ const engine = new QueryEngine();
 type QueryBindingsOptions = NonNullable<Parameters<QueryEngine['queryBindings']>[1]>;
 type QuerySource = QueryBindingsOptions['sources'][number];
 
-function mergeStores(inputs: ParsedOntologyInput[]) {
+export function mergeStores(inputs: ParsedOntologyInput[]) {
   const merged = new Store();
 
   for (const input of inputs) {
