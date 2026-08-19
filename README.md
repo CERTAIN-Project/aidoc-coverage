@@ -9,7 +9,7 @@ SvelteKit application for comparing an instantiated ontology against an originat
 - `@comunica/query-sparql`
 - Vitest + Playwright
 
-## Docker
+## Setup - Docker
 
 This repository includes two Docker Compose files:
 
