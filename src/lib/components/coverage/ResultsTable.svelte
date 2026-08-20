@@ -14,7 +14,10 @@
   let currentPage = 0;
 
   $: totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
-  $: { if (currentPage >= totalPages) currentPage = 0; }
+  $: {
+    results;
+    currentPage = 0;
+  }
   $: pageResults = results.slice(currentPage * PAGE_SIZE, (currentPage + 1) * PAGE_SIZE);
   $: start = currentPage * PAGE_SIZE + 1;
   $: end = Math.min((currentPage + 1) * PAGE_SIZE, results.length);

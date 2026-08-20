@@ -15,7 +15,8 @@
 
     $: totalPages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
     $: {
-        if (currentPage >= totalPages) currentPage = 0;
+        entries;
+        currentPage = 0;
     }
     $: pageEntries = entries.slice(
         currentPage * PAGE_SIZE,

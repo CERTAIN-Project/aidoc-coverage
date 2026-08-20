@@ -8,9 +8,9 @@
   export let result: QueryEvaluation | null = null;
 </script>
 
-<Card class="p-4 section-card" size="xl">
+<Card class="p-4 section-card h-full" size="xl">
   {#if result}
-    <div class="min-w-0 space-y-4">
+    <div class="flex h-full min-w-0 flex-col space-y-4 overflow-y-auto">
       <div class="flex items-start justify-between gap-4">
         <div class="min-w-0">
           <p class="text-sm uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-2">{result.group}</p>

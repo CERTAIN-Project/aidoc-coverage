@@ -31,6 +31,7 @@
   let selectedCompletenessStatus: CompletenessFilterStatus = 'all';
   let selectedCompletenessEntry: CompletenessEntry | null = null;
   let completenessTableHeight = 0;
+  let resultsTableHeight = 0;
 
   $: filteredResults =
     response?.results.filter((result) => selectedFilter === 'all' || result.status === selectedFilter) ?? [];
@@ -139,15 +140,15 @@
             <ResultsFilterBar selected={selectedFilter} on:change={(event) => (selectedFilter = event.detail)} />
 
             {#if filteredResults.length}
-              <div class="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start gap-6">
-                <div class="min-w-0">
+              <div class="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-stretch gap-6">
+                <div class="min-w-0" bind:clientHeight={resultsTableHeight}>
                   <ResultsTable
                     results={filteredResults}
                     selectedId={selectedResult?.queryId ?? ''}
                     on:select={(event) => (selectedResult = event.detail)}
                   />
                 </div>
-                <div class="min-w-0">
+                <div class="min-w-0 overflow-hidden" style="height: {resultsTableHeight}px">
                   <ResultDetailPanel result={selectedResult} />
                 </div>
               </div>
