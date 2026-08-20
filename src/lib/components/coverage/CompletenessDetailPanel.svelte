@@ -41,8 +41,8 @@
           <ul class="mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto rounded-xl border border-slate-200 bg-slate-100 p-4 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200">
             {#each entry.instances as instance}
               <li class="break-all">
-                {labelForValue(instance)}
-                <span class="block text-xs text-slate-500 dark:text-slate-400">{instance}</span>
+                {labelForValue(decodeURIComponent(instance))}
+                <span class="block text-xs text-slate-500 dark:text-slate-400">{decodeURIComponent(instance)}</span>
               </li>
             {/each}
           </ul>
