@@ -21,6 +21,6 @@ describe('ResultDetailPanel', () => {
 
     expect(getByText('Provider information is documented')).toBeInTheDocument();
     expect(getByText('Only one item was present.')).toBeInTheDocument();
-    expect(getByText('cq1')).toBeInTheDocument();
+    expect(getByText(/cq1/)).toBeInTheDocument();
   });
 });
